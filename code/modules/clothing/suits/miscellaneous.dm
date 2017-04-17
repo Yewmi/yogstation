@@ -492,6 +492,15 @@
 /obj/item/clothing/head/winterhood/engineering/atmos
 	icon_state = "winterhood_atmos"
 
+/obj/item/clothing/suit/hooded/wintercoat/engineering/tcomms
+	name = "signal technician's winter coat"
+	icon_state = "coatsignaltech"
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/internals/emergency_oxygen,/obj/item/device/radio,/obj/item/device/analyzer,/obj/item/device/multitool,/obj/item/device/assembly/signaler)
+	hoodtype = /obj/item/clothing/head/winterhood/engineering/tcomms
+
+/obj/item/clothing/head/winterhood/engineering/tcomms
+	icon_state = "winterhood_signaltech"
+
 /obj/item/clothing/suit/hooded/wintercoat/hydro
 	name = "hydroponics winter coat"
 	icon_state = "coathydro"
@@ -525,3 +534,16 @@
 	icon_state = "bedsheet"
 	user_vars_to_edit = list("name" = "Spooky Ghost", "real_name" = "Spooky Ghost" , "incorporeal_move" = 1, "appearance_flags" = KEEP_TOGETHER|TILE_BOUND, "alpha" = 150)
 	alternate_worn_layer = ABOVE_BODY_FRONT_LAYER //so the bedsheet goes over everything but fire
+
+
+//hoody
+
+/obj/item/clothing/suit/hooded/wintercoat/superb
+	name = "superb hoodie"
+	icon_state = "coatsuperb"
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	hoodtype = /obj/item/clothing/head/winterhood/superb
+	desc = "Superb's newest SS13 drop hoodie, even just looking at it makes you feel cool."
+
+/obj/item/clothing/head/winterhood/superb
+	icon_state = "winterhood_superb"

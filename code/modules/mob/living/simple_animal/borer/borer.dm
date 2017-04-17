@@ -35,6 +35,7 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 	var/dominate_cooldown = 150
 	var/control_cooldown = 3000
 	var/leaving = 0
+	var/obj/item/organ/borer_home/vessel = null
 
 
 /mob/living/simple_animal/borer/New()
@@ -87,6 +88,7 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 				client.images += image('icons/mob/hud.dmi',B.victim,"borer")
 			if(victim && victim.client)
 				victim.client.images += image('icons/mob/hud.dmi',B.victim,"borer")
+
 
 	if(victim)
 		if(stat != DEAD)
@@ -162,9 +164,11 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 	victim << "<span class='green'><b>[name] telepathically says... </b></span>\"[message2]\""
 	src << "<span class='green'><b>[name] telepathically says... </b></span>\"[message2]\""
 
-/mob/living/simple_animal/borer/UnarmedAttack(mob/living/M)
-	healthscan(usr, M)
-	chemscan(usr, M)
+/mob/living/simple_animal/borer/UnarmedAttack(atom/A)
+	if(isliving(A))
+		var/mob/living/M = A
+		healthscan(usr, M)
+		chemscan(usr, M)
 	return
 
 /mob/living/simple_animal/borer/ex_act()
@@ -194,6 +198,7 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 	var/obj/item/organ/borer_home/B = new/obj/item/organ/borer_home(victim)
 	B.Insert(victim)
 	B.borer = src
+	vessel = B
 	loc = victim
 
 	log_game("[src]/([src.ckey]) has infected [victim]/([victim.ckey]")
@@ -205,10 +210,16 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 		detatch()
 
 	loc = get_turf(victim)
+	if(victim.client)
+		for(var/image/hud in victim.client.images)
+			if(hud.icon_state == "borer")
+				victim.client.images -= hud
 
-	for(var/image/hud in victim.client.images)
-		if(hud.icon_state == "borer")
-			client.images -= hud
+	leaving = 0
+	var/obj/item/organ/borer_home/oldhome = vessel
+	oldhome.borer = null
+	vessel = null
+	qdel(oldhome) //deletes the borer vessel within the host they're leaving
 
 	victim.borer = null
 	victim = null
@@ -294,7 +305,7 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 	name = "borer vessel"
 	zone = "head"
 	slot = "brain tumor"
-	desc = "A hunk of alien flesh molded from the inside of a human brain. It now resembles a once operatable command center for a borer. Home is where the heart is. Or in this case, the head."
+	desc = "A hunk of alien flesh molded from the inside of a human brain. It now resembles a once operable command center for a borer. Home is where the heart is. Or in this case, the head."
 	icon_state = "eggsac"
 	var/mob/living/simple_animal/borer/borer = null
 
@@ -304,8 +315,11 @@ var/banned_borer_emotes = list("*collapse", "*collapses", "*surrender", "*surren
 		borer << "<span class='warning'>Your [src] is rising into the air! Something isn't right!"
 		borer.leave_victim()
 
-	M << "<span class='notice'>You feel the sweet embrace of dopamine that surges through your brain as it's suddenly relieved of a foreign parasite.</span>"
-	qdel(src)
+	if(M.borer) // if there's still a borer inside of them for whatever reason
+		M.borer.leave_victim()
+
+	M << "<span class='notice'>You feel the sweet embrace of dopamine as that parasite is cleansed from your mind.</span>"
+//	qdel(src)
 	..()
 
 

@@ -2,6 +2,7 @@
 	mob_list -= src
 	dead_mob_list -= src
 	living_mob_list -= src
+	all_clockwork_mobs -= src
 	qdel(hud_used)
 	if(mind && mind.current == src)
 		spellremove(src)
@@ -515,7 +516,8 @@ var/next_mob_id = 0
 			var/obj/item/what = get_item_by_slot(slot)
 
 			if(what)
-				usr.stripPanelUnequip(what,src,slot)
+				if(!(what.flags & ABSTRACT))
+					usr.stripPanelUnequip(what,src,slot)
 			else
 				usr.stripPanelEquip(what,src,slot)
 
@@ -704,7 +706,7 @@ var/next_mob_id = 0
 			fall()
 		else if(ko || (!has_legs && !ignore_legs) || chokehold)
 			fall(forced = 1)
-	canmove = !(ko || resting || stunned || chokehold || buckled || (!has_legs && !ignore_legs && !has_arms))
+	canmove = !((is_nearcrit() ? 0 : ko) || resting || stunned || chokehold || buckled || (!has_legs && !ignore_legs && !has_arms))
 	density = !lying
 	if(lying)
 		if(layer == initial(layer)) //to avoid special cases like hiding larvas.

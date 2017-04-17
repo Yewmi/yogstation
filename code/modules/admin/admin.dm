@@ -53,7 +53,7 @@ var/global/BSACooldown = 0
 		if(config.use_antag_tokens)
 			body += "<b>Antag Tokens</b> = [C.antag_tokens] \[ <a href='?_src_=holder;antag_token_decrease=\ref[M]'>- Less -</a> | <a href='?_src_=holder;antag_token_increase=\ref[M]'>+ More +</a> \]<br>"
 
-		if(check_rights(R_PERMISSIONS))
+		if(check_rights(R_PERMISSIONS, FALSE))
 			body += "<b>Whitelisted</b> = [C.is_whitelisted ? "Yes" : "No"] \[ <a href='?_src_=holder;toggle_whitelisted=\ref[M]'>Toggle</a> \]<br>"
 
 		body += "<b>Credits</b> = [C.credits]<br><br>"
@@ -126,6 +126,11 @@ var/global/BSACooldown = 0
 			else
 				body += "<A href='?_src_=holder;corgione=\ref[M]'>Corgize</A> | "
 
+			if(isovermind(M))
+				body += "<B>Blob | </B>"
+			else
+				body += "<A href='?_src_=holder;makeblob=\ref[M]'>Make Blob</A> | "
+
 			//AI / Cyborg
 			if(isAI(M))
 				body += "<B>Is an AI</B> "
@@ -134,7 +139,6 @@ var/global/BSACooldown = 0
 				body += "<A href='?_src_=holder;makerobot=\ref[M]'>Make Robot</A> | "
 				body += "<A href='?_src_=holder;makealien=\ref[M]'>Make Alien</A> | "
 				body += "<A href='?_src_=holder;makeslime=\ref[M]'>Make Slime</A> | "
-				body += "<A href='?_src_=holder;makeblob=\ref[M]'>Make Blob</A> | "
 
 			//Simple Animals
 			if(isanimal(M))
@@ -1033,6 +1037,7 @@ datum/admins/proc/cyberman_varedit(list/href_list)
 	var/mindcontrol = 0
 
 	dat += "<h1><center><B>Borer Control Panel</B></center></h1>"
+	dat += "<A href='?_src_=holder;borer'>Refresh</A><br><br>"
 
 	for(var/mob/living/carbon/C in living_mob_list)
 		if(C.borer)
@@ -1046,8 +1051,8 @@ datum/admins/proc/cyberman_varedit(list/href_list)
 			if(C.borer.controlling)
 				mindcontrol++
 				dat += "[C] is currently being controlled by their borer ([C.borer]/[C.ckey])! The borers ckey and mind is in the body of the actual [C]."
-				dat += "[C]'s actual mob is residing in a host brain repository: (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.borer.host_brain]'>?</A> | (<A HREF='?_src_=holder;adminplayeropts=\ref[C.borer.host_brain]'>PP</A>)"
-				dat += "[C]'s borer is here: (<A HREF='?_src_=holder;adminmoreinfo=\ref[C]'>?</A> | (<A HREF='?_src_=holder;adminplayeropts=\ref[C]'>PP</A>)"
+				dat += "[C]'s actual mind is residing in a host brain repository: (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.borer.host_brain]'>?</A> | (<A HREF='?_src_=holder;adminplayeropts=\ref[C.borer.host_brain]'>PP</A>)"
+				dat += "[C]'s borers' mind is here: (<A HREF='?_src_=holder;adminmoreinfo=\ref[C]'>?</A> | (<A HREF='?_src_=holder;adminplayeropts=\ref[C]'>PP</A>)"
 			else
 				dat += "[C]/[C.ckey] (<A HREF='?_src_=holder;adminmoreinfo=\ref[C]'>?</A> | (<A HREF='?_src_=holder;adminplayeropts=\ref[C]'>PP</A>) has a borer within them!<br>"
 				dat += "[C.borer]/[C.borer.ckey] (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.borer]'>?</A> | (<A HREF='?_src_=holder;adminplayeropts=\ref[C.borer]'>PP</A>) is inside of [C]'s head!"

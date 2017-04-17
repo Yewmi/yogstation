@@ -125,7 +125,8 @@
 
 #define TRANSITIONEDGE			7 //Distance from edge to move to another z-level
 
-
+// Max number of station goals
+#define STATION_GOAL_BUDGET  1
 
 //HUD styles. Please ensure HUD_VERSIONS is the same as the maximum index. Index order defines how they are cycled in F12.
 #define HUD_STYLE_STANDARD 1
@@ -470,3 +471,8 @@ var/global/list/ghost_others_options = list(GHOST_OTHERS_SIMPLE, GHOST_OTHERS_DE
 #define debug_world(msg) if (Debug2) world << "DEBUG: [msg]"
 #define debug_admins(msg) if (Debug2) admins << "DEBUG: [msg]"
 #define debug_world_log(msg) if (Debug2) world.log << "DEBUG: [msg]"
+
+//outfit browsers
+#define OUTFIT_BROWSE_CHAMELEON /datum/outfit_browse/chameleon
+#define OUTFIT_BROWSE_CHANGELING null
+#define OUTFIT_BROWSE_ADMIN null
